@@ -1,0 +1,9 @@
+[Breakpoints]
+Count=0
+[Interrupts]
+Enabled=1
+[MemoryMap]
+Enabled=0
+TypeVolition=1
+UnspecRange=1
+ActionState=1

@@ -1,0 +1,181 @@
+#ifndef LRWPAN_COMMON_TYPES_H
+#define LRWPAN_COMMON_TYPES_H
+
+//types common across stack or multiple stack layers
+
+//common macros
+#define BITSET(var,bitno) ((var) |= (1 << (bitno)))
+#define BITCLR(var,bitno) ((var) &= ~(1 << (bitno)))
+#define BITTST(var,bitno) (var & (1 << (bitno)))
+
+
+//网络服务枚举
+typedef enum _LRWPAN_SVC_ENUM {
+  LRWPAN_SVC_NONE,
+  LRWPAN_SVC_PHY_INIT_RADIO,
+  LRWPAN_SVC_PHY_TX_DATA,
+  LRWPAN_SVC_PHY_ED,
+  LRWPAN_SVC_PHY_SET_TRX,
+
+  LRWPAN_SVC_MAC_GENERIC_TX,//一般性发送数据
+  LRWPAN_SVC_MAC_RETRANSMIT,//重传
+  LRWPAN_SVC_MAC_ASSOC_REQ,//连接请求
+  LRWPAN_SVC_MAC_DISASSOC_REQ,//断开连接,add now
+  LRWPAN_SVC_MAC_GTS_REQ,//GTS请求
+  LRWPAN_SVC_MAC_RESET_REQ,//MAC复位
+  //LRWPAN_SVC_MAC_RX_ENABLE,//指定接收机工作时间
+  LRWPAN_SVC_MAC_SCAN_REQ,//信道扫描
+  LRWPAN_SVC_MAC_START_REQ,//升级超帧配置
+  LRWPAN_SVC_MAC_SYNC_REQ,//与协调器同步
+  //LRWPAN_SVC_MAC_POLL_REQ,//请求协调器数据
+  LRWPAN_SVC_MAC_BEACON_REQ,//信标请求
+  LRWPAN_SVC_MAC_ORPHAN_NOTIFY,//孤立通告
+  LRWPAN_SVC_MAC_ERROR,
+
+  LRWPAN_SVC_NWK_GENERIC_TX,//网络层发送数据
+  LRWPAN_SVC_NWK_DISC_NETWORK,//网络发现
+  LRWPAN_SVC_NWK_FORM_NETWORK,//形成网络
+  LRWPAN_SVC_NWK_JOIN_NETWORK,//加入网络
+  //LRWPAN_SVC_NWK_DIRE_JOIN_NETWORK,//直接将设备同网络连接
+  LRWPAN_SVC_NWK_LEAVE_NETWORK,//断开网络,add now
+  //LRWPAN_SVC_NWK_RESET,//重新复位设备
+  //LRWPAN_SVC_NWK_SYNC,//接收机同步
+  LRWPAN_SVC_NWK_GTS_REQ,
+
+  LRWPAN_SVC_APS_GENERIC_TX,
+  LRWPAN_SVC_APS_NWK_PASSTHRU,
+  LRWPAN_SVC_APS_DO_ZEP_TX,
+} LRWPAN_SVC_ENUM;
+
+
+//网络工作状态枚举
+typedef enum _LRWPAN_STATUSENUM {
+  LRWPAN_STATUS_SUCCESS = 0,
+  LRWPAN_STATUS_TX_LOCKED,
+  LRWPAN_STATUS_INVALID_REQUEST,//请求无效，add now
+  LRWPAN_STATUS_INVALID_PARAMETER,//参数无效，add now
+  LRWPAN_STATUS_UNKNOWN_DEVICE,//未知设备，add now
+  LRWPAN_STATUS_STARTUP_FAILURE,//建立网络失败
+  LRWPAN_STATUS_SEND_OVERTIME,//数据重发超时
+
+  LRWPAN_STATUS_PHY_FAILED,
+  LRWPAN_STATUS_PHY_INPROGRESS,  //still working for splitphase operations
+  LRWPAN_STATUS_PHY_RADIO_INIT_FAILED,
+  LRWPAN_STATUS_PHY_TX_PKT_TOO_BIG,
+  LRWPAN_STATUS_PHY_TX_START_FAILED,
+  LRWPAN_STATUS_PHY_TX_FINISH_FAILED,
+  LRWPAN_STATUS_PHY_CHANNEL_BUSY,
+  LRWPAN_STATUS_PHY_TRX_OFF,
+  LRWPAN_STATUS_PHY_TX_ON,
+  LRWPAN_STATUS_PHY_RX_ON,
+  LRWPAN_STATUS_PHY_BUSY_TX,
+  LRWPAN_STATUS_PHY_BUSY_RX,
+
+  LRWPAN_STATUS_MAC_FAILED,
+  LRWPAN_STATUS_MAC_NO_ACK,
+  LRWPAN_STATUS_MAC_NO_DATA,
+  LRWPAN_STATUS_MAC_NOT_ASSOCIATED,
+  LRWPAN_STATUS_MAC_NOT_DISASSOCIATED,
+  LRWPAN_STATUS_MAC_DISABLE_TRX_FAILURE,
+  LRWPAN_STATUS_MAC_INPROGRESS,  //still working for splitphase operations
+  LRWPAN_STATUS_MAC_MAX_RETRIES_EXCEEDED,  //exceeded max retries
+  LRWPAN_STATUS_MAC_TX_FAILED,    //MAC Tx Failed, retry count exceeded
+  LRWPAN_STATUS_MAC_ASSOCIATION_TIMEOUT,  //association request timedout
+  LRWPAN_STATUS_MAC_ASSOCIATION_DENY,
+  LRWPAN_STATUS_MAC_ORPHAN_TIMEOUT,       //ophan notify timedout
+  LRWPAN_STATUS_MAC_NO_BEACON,
+  LRWPAN_STATUS_MAC_NO_SHORT_ADDRESS,
+
+  LRWPAN_STATUS_NWK_INPROGRESS,
+  LRWPAN_STATUS_NWK_JOIN_TIMEOUT,
+  LRWPAN_STATUS_NWK_PACKET_UNROUTABLE,
+  LRWPAN_STATUS_NWK_RADIUS_EXCEEDED,
+  LRWPAN_STATUS_NWK_JOIN_NOT_PERMITTED,
+
+  LRWPAN_STATUS_APS_INPROGRESS,
+  LRWPAN_STATUS_APS_MAX_RETRIES_EXCEEDED,
+  LRWPAN_STATUS_APS_ILLEGAL_ENDPOINT,
+  LRWPAN_STATUS_APS_MAX_ENDPOINTS_EXCEEDED,
+  LRWPAN_STATUS_INDIRECT_BUFFER_FULL,
+  LRPAN_STATUS_ZEP_FAILED,
+  LRPAN_STATUS_ZEPCALLBACK_FAILED,
+  LRPAN_STATUS_USRCALLBACK_FAILED,
+  LRWPAN_STATUS_HEAPFULL
+}LRWPAN_STATUS_ENUM;
+
+
+//短地址类型，16位
+typedef UINT16 SADDR;
+//typedef UINT16 PANID;
+
+//these bytes ALWAYS stored in little-endian order
+//长地址类型，64位
+typedef struct _LADDR {
+  BYTE bytes[8];
+}LADDR;
+
+//only used to store IEEE Long Address or PAN short address
+//设备地址共用体,长地址和短地址
+typedef union _LADDR_UNION {
+  LADDR laddr;
+  SADDR saddr;
+}LADDR_UNION;
+
+//ZigBee频率工作范围
+typedef enum _PHY_FREQ_ENUM {
+  PHY_FREQ_868M=0,  //868---868.6MHz
+  PHY_FREQ_RSV,
+  PHY_FREQ_915M,    //902---928MHz
+  PHY_FREQ_2405M    //2400---2483.5MHz
+}PHY_FREQ_ENUM;
+
+//ZigBee设备类型
+typedef enum _NODE_TYPE_ENUM {
+  NODE_TYPE_COORD=0,  //协调器
+  NODE_TYPE_ROUTER,   //路由器
+  NODE_TYPE_ENDDEVICE //设备
+}NODE_TYPE_ENUM;
+
+//used for radio initialization
+/*无线信道共用体*/
+typedef union _RADIO_FLAGS {
+	BYTE val;
+	struct _RADIO_FLAGS_bits {
+        //if true, then put radio in listen mode, which is non-auto ack, no address decoding
+        unsigned listen_mode:1;
+        unsigned pan_coordinator:1;   //set the pan coordinator bit
+	}bits;
+ }RADIO_FLAGS;
+
+typedef struct _MACPKT {
+	BYTE *data;
+	INT8 rssi;
+        BYTE corr;
+}MACPKT;
+
+typedef struct{
+	UINT32 sec;
+	UINT32 us;
+}sTime;
+//时间错 add by weimin 20071024.
+
+#ifdef LRWPAN_COMPILER_BIG_ENDIAN
+/*大字节存储方式，数据值的最高位存储在地址的开始处*/
+#define UINT32_LOWORD_LSB 3
+#define UINT32_LOWORD_MSB 2
+#define UINT32_HIWORD_LSB 1
+#define UINT32_HIWORD_MSB 0
+#define UINT16_LSB 1
+#define UINT16_MSB 0
+#else
+/*小字节存储方式，数据值的最高位存储在地址的末尾处*/
+#define UINT32_LOWORD_LSB 0
+#define UINT32_LOWORD_MSB 1
+#define UINT32_HIWORD_LSB 2
+#define UINT32_HIWORD_MSB 3
+#define UINT16_LSB 0
+#define UINT16_MSB 1
+#endif
+
+
+#endif
